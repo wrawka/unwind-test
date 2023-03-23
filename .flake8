@@ -1,0 +1,13 @@
+[flake8]
+ignore =
+    W503,
+    F811
+exclude =
+    */migrations/,
+    venv/,
+    .venv/,
+    env/
+per-file-ignores =
+    settings.py:E501
+max-line-length = 100
+max-complexity = 10
