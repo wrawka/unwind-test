@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-center display-2">{% block header %}Orders Data from PSQL{% endblock %}</h1>
+<h2 class="text-center"><i class="fas fa-funnel-dollar"></i> {{ usd_total }} (total)</h2>
+	<table id="example" class="display Datatable" style="width:100%">
+		<thead>
+		<tr>
+			{% for h in header %}
+			<th>{{ h }}</th>
+			{% endfor %}
+		</tr>
+		</thead>
+		<tbody>
+		{% for order in orders %}
+				<tr>
+				<td>{{order.line_no}}</td>
+				<td>{{order.order_no}}</td>
+				<td>{{order.due_date}}</td>
+				<td>{{order.value_usd}}</td>
+				<td>{{order.value_rub|floatformat:"2g"}}</td>
+				</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" class="init">
+    $(document).ready(function () {
+      $('#example').DataTable();
+    });
+  </script>
+{% endblock %}
