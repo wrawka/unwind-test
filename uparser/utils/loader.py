@@ -1,9 +1,11 @@
+from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from parser.models import OrderLine
 from utils.data import OrderLineData, make_dataframe
 from utils.logging_config import configure_logging, logging
 from utils.online import read_google_spreadsheet
+from bot import bot
 
 configure_logging()
 
@@ -20,6 +22,8 @@ def load2django():
             order_line.value_usd = line.value_usd
             order_line.value_rub = line.value_rub
             order_line.due_date = line.due_date
+            if line.due_date < datetime.today():
+                bot.send_message('Order {} is overdue!'.format(line.order_no))
         except ObjectDoesNotExist:
             order_line = OrderLine.objects.create(**line.__dict__)
 
@@ -30,3 +34,10 @@ def load2django():
             logging.warning(
                 'Data integrity issue with: {}. Record was not saved.'.format(order_line))
             logging.error(e.error_dict)
+
+        # cleaning DB
+        actual_orders = set(df['заказ №'].astype(int))
+        db_orders = OrderLine.objects.all()
+        for order in db_orders:
+            if order.order_no not in actual_orders:
+                order.delete()
