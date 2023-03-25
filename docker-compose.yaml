@@ -6,17 +6,22 @@ services:
     build: uparser
     env_file:
       - ./uparser/.env
+    volumes:
+      - ./uparser/credentials:/app/credentials/
+    depends_on:
+      - db
     ports:
       - "8000:8000"
 
   db:
     image: postgres:15
-    ports:
-      - "5432:5432"
-    volumes:
-        - postgres_data:/var/lib/postgresql/data/
     env_file:
         - ./uparser/.env
+    volumes:
+        - postgres_data:/var/lib/postgresql/data/
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
 
 volumes:
   postgres_data:
