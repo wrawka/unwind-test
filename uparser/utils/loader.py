@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
@@ -23,7 +24,7 @@ def load2django():
             order_line.value_rub = line.value_rub
             order_line.due_date = line.due_date
             if line.due_date < datetime.today():
-                bot.send_message('Order {} is overdue!'.format(line.order_no))
+                asyncio.run(bot.send_message('Order {} is overdue!'.format(line.order_no)))
         except ObjectDoesNotExist:
             order_line = OrderLine.objects.create(**line.__dict__)
 

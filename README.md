@@ -1,5 +1,12 @@
 # Тестовое unwinddigital
 
+![](https://img.shields.io/badge/python-3.11-blue)
+![](https://img.shields.io/badge/Django-4.1-green)
+![](https://img.shields.io/badge/pandas-1.5-red)
+![](https://img.shields.io/badge/PostgreSQL-15-orange)
+![](https://img.shields.io/badge/Bootstrap-5-blueviolet)
+![](https://img.shields.io/badge/datatables-1.13-blue)
+
 ### Что это
 
 `uparser` - это парсер (одного конкретного xD) Google Sheets [документа](https://docs.google.com/spreadsheets/d/1dYz1KijuuQvToFfdh2-1OpTdVLpfdCQ8z5mnrMZ0VoI/edit#gid=0). 
@@ -15,6 +22,8 @@
 ETL-процесс запускается по расписанию `Django Q`. По-умолчанию источник в Google Sheets читается каждые 2 минуты.
 Настройка расписания доступна в [http://localhost:8000/admin/django_q/](админке django).
 
+Для просроченных заказов, можно (опционально) отправлять сообщения в Телеграм через бота. Для этого в `.env`-файле необходимо указать токен для бота и id чата пользователя.
+
 ### "Серые зоны" ТЗ
 
 - Как обрабытывать противоречивые данные в исходной таблице? 
@@ -27,9 +36,10 @@ ETL-процесс запускается по расписанию `Django Q`. 
 ### Как это запустить
 
 1. Скопировать json-файл с ключами от **Google service accout** в папку _uparser/credentials_.
-2. Переименовать файл _uparser/.env-sample > .env_, отредактировать при необходимости параметры.
-3. Выполнить 
+2. Переименовать файл _uparser/.env-sample > .env_, отредактировать при необходимости параметры (SERVICE_ACCOUNT_FILE, BOT_TOKEN, CHAT_ID etc.).
+3. Выполнить из корневой директории проекта (нужен установленный Docker).
     ```bash
     docker-compose up
     ``` 
-    из корневой директории проекта (нужен установленный Docker).
+4. После запуска контейнеров перейти на [http://localhost:8000/](http://localhost:8000/)
+5. В правом верхнем углу страницы есть кнопки для перехода в админку django и для принудительного запуска ETL.
